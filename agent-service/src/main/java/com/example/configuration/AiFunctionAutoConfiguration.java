@@ -1,9 +1,10 @@
 package com.example.configuration;
 
 
+import com.example.client.AccountApiClient;
 import com.example.client.OrderApiClient;
-import com.example.function.OrderBuyFunction;
-import com.example.function.OrderSellFunction;
+import com.example.client.PortfolioApiClient;
+import com.example.function.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.ai.tool.ToolCallback;
 import org.springframework.ai.tool.function.FunctionToolCallback;
@@ -14,7 +15,8 @@ import org.springframework.context.annotation.Configuration;
 @RequiredArgsConstructor
 public class AiFunctionAutoConfiguration {
     private final OrderApiClient orderApiClient;
-
+    private final AccountApiClient accountApiClient;
+    private final PortfolioApiClient portfolioApiClient;
     @Bean
     public ToolCallback orderBuyFunctionToolCallback() {
         return FunctionToolCallback
@@ -33,5 +35,35 @@ public class AiFunctionAutoConfiguration {
                 .inputType(OrderBuyFunction.Request.class)
                 .build();
     }
+
+    @Bean
+    public ToolCallback accountInquiryFunctionToolCallback() {
+        return FunctionToolCallback
+                .builder("accountInquiry", new AccountFunction(accountApiClient))
+                .description("查詢帳號餘額") // function 描述
+                .inputType(OrderBuyFunction.Request.class)
+                .build();
+    }
+
+    @Bean
+    public ToolCallback queryPortfolioFunctionToolCallback() {
+        return FunctionToolCallback
+                .builder("queryPortfolio", new QueryPortfolioFunction(portfolioApiClient))
+                .description("查詢帳號股票庫存") // function 描述
+                .inputType(OrderBuyFunction.Request.class)
+                .build();
+    }
+
+    @Bean
+    public ToolCallback putPortfolioFunctionToolCallback() {
+        return FunctionToolCallback
+                .builder("putPortfolio", new PutPortfolioFunction(portfolioApiClient))
+                .description("更新帳號股票庫存") // function 描述
+                .inputType(OrderBuyFunction.Request.class)
+                .build();
+    }
+
+
+
 
 }

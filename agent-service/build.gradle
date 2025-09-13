@@ -25,6 +25,7 @@ dependencies {
     // spring ai
     implementation platform("org.springframework.ai:spring-ai-bom:${springAiVersion}")
     implementation 'org.springframework.ai:spring-ai-vertex-ai-gemini'
+    implementation 'org.springframework.ai:spring-ai-starter-model-vertex-ai-gemini'
 
     // lombok
     compileOnly 'org.projectlombok:lombok'
