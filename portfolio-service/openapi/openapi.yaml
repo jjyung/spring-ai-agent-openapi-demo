@@ -1,0 +1,107 @@
+openapi: 3.1.0
+x-stoplight:
+  id: 7sfclhcd6mj01
+info:
+  title: 查詢庫存服務
+  version: '1.0'
+  description: 查詢庫存服務
+  contact:
+    email: heisenberg.chen@cathayholdings.com.tw
+    name: heisenberg
+servers:
+  - url: 'http://localhost:3000'
+paths:
+  '/api/portfolio/{account}':
+    get:
+      summary: 查詢帳號庫存
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/GetPortfolioResponseDTO'
+                  x-stoplight:
+                    id: rzqjanrq86cad
+              examples:
+                Example 1:
+                  value:
+                    - productId: string
+                      count: 0
+      operationId: get-api-portfolio
+      description: 查詢帳號庫存
+      tags:
+        - Portfolio
+    parameters:
+      - schema:
+          type: string
+        name: account
+        in: path
+        required: true
+        description: 帳號
+    put:
+      summary: 更新庫存
+      operationId: put-api-portfolio-account
+      responses:
+        '200':
+          description: OK
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: ../../order-service/openapi/openapi.yaml#/components/schemas/CommonResponseDTO
+      description: 更新庫存
+      tags:
+        - Portfolio
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PutPortfollioRequestDTO'
+            examples:
+              Example 1:
+                value:
+                  count: -1
+                  productId: '2330'
+components:
+  schemas:
+    PutPortfollioRequestDTO:
+      title: PutPortfollioRequestDTO
+      x-stoplight:
+        id: o16enp9m8q5r4
+      type: object
+      properties:
+        count:
+          type: integer
+          x-stoplight:
+            id: uvf0021qqxpqt
+          description: 數量
+        productId:
+          type: string
+          x-stoplight:
+            id: uwh6fuwmc6pon
+          description: 產品代碼
+      required:
+        - count
+        - productId
+    GetPortfolioResponseDTO:
+      title: GetPortfolioResponseDTO
+      x-stoplight:
+        id: 0nfo7gdsh2g5r
+      type: object
+      properties:
+        productId:
+          type: string
+          x-stoplight:
+            id: tx0zsg62pm12v
+          description: 產品代碼
+        count:
+          type: integer
+          x-stoplight:
+            id: 6dafn25l6glo8
+          description: 數量
+tags:
+  - name: Portfolio

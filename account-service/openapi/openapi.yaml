@@ -1,0 +1,49 @@
+openapi: 3.1.0
+x-stoplight:
+  id: 7sfclhcd6mj01
+info:
+  title: 查詢帳號服務
+  version: '1.0'
+  description: 查詢帳號服務
+  contact:
+    email: heisenberg.chen@cathayholdings.com.tw
+    name: heisenberg
+servers:
+  - url: 'http://localhost:3000'
+paths:
+  '/api/inquiry/{account}':
+    get:
+      summary: 查詢帳號餘額
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetInquiryResponseDTO'
+      operationId: get-api-inquiry
+      description: 查詢帳號餘額
+      tags:
+        - Account
+    parameters:
+      - schema:
+          type: string
+        name: account
+        in: path
+        required: true
+        description: 帳號
+components:
+  schemas:
+    GetInquiryResponseDTO:
+      title: GetInquiryResponseDTO
+      x-stoplight:
+        id: zx0rf39bh8p25
+      type: object
+      properties:
+        amount:
+          type: number
+          x-stoplight:
+            id: 7yis7z5t34ckg
+          description: 帳號餘額
+tags:
+  - name: Account

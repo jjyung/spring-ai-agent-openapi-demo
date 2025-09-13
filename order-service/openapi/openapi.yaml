@@ -1,0 +1,148 @@
+openapi: 3.1.0
+x-stoplight:
+  id: 7sfclhcd6mj01
+info:
+  title: 下單服務
+  version: '1.0'
+  contact:
+    email: heisenberg.chen@cathayholdings.com.tw
+    name: heisenberg
+  description: 下單服務
+servers:
+  - url: 'http://localhost:3000'
+paths:
+  /api/buy:
+    parameters: []
+    post:
+      summary: 下單買進
+      operationId: post-api-buy
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonResponseDTO'
+              examples:
+                Example 1:
+                  value:
+                    message: success.
+                    returnCode: '0000'
+      description: 下單買進
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BuyRequestDTO'
+            examples:
+              Example 1:
+                value:
+                  account: test123
+                  productId: '2330'
+                  count: 1
+      tags:
+        - Order
+  /api/sell:
+    parameters: []
+    post:
+      summary: 下單買進
+      operationId: post-api-sell
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonResponseDTO'
+              examples:
+                Example 1:
+                  value:
+                    message: success.
+                    returnCode: '0000'
+      description: 下單賣出ㄇ
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SellRequestDTO'
+            examples:
+              Example 1:
+                value:
+                  account: test123
+                  productId: '2330'
+                  count: 1
+      tags:
+        - Order
+components:
+  schemas:
+    CommonResponseDTO:
+      title: CommonResponseDTO
+      x-stoplight:
+        id: vpjuguc2ou2jb
+      type: object
+      properties:
+        message:
+          type: string
+          x-stoplight:
+            id: ex93fzuc02xne
+          description: 回傳訊息
+        returnCode:
+          type: string
+          x-stoplight:
+            id: fjnbx8cbt2gmi
+          description: 狀態碼
+      examples:
+        - message: success.
+          returnCode: '0000'
+    BuyRequestDTO:
+      title: BuyRequestDTO
+      x-stoplight:
+        id: dvu7juy475hpb
+      type: object
+      properties:
+        account:
+          type: string
+          x-stoplight:
+            id: ajcu7jv2ohc79
+          description: 交易帳號
+        productId:
+          type: string
+          x-stoplight:
+            id: 8tw95xzvooio4
+          description: 產品代碼
+        count:
+          type: integer
+          x-stoplight:
+            id: 87rchvh6w9xsz
+          description: 數量
+      required:
+        - account
+        - productId
+        - count
+    SellRequestDTO:
+      title: SellRequestDTO
+      x-stoplight:
+        id: tjoipj0pqvrhk
+      type: object
+      properties:
+        account:
+          type: string
+          x-stoplight:
+            id: yojfzkjpgshy6
+          description: 交易帳號
+        productId:
+          type: string
+          x-stoplight:
+            id: 3q98geyfm3l13
+          description: 產品代碼
+        count:
+          type: integer
+          x-stoplight:
+            id: roj8681vm8eri
+          description: 數量
+      required:
+        - account
+        - productId
+        - count
+tags:
+  - name: Order

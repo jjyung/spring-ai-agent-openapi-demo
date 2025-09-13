@@ -1,5 +1,6 @@
 plugins {
     id 'java'
+    id 'org.openapi.generator' version "7.10.0"
 }
 
 group = 'com.example'
@@ -8,12 +9,85 @@ version = '0.1.0'
 repositories {
     mavenCentral()
 }
+ext {
+    set('springAiVersion', "1.0.1")
+}
 
 dependencies {
-    testImplementation platform('org.junit:junit-bom:5.10.0')
-    testImplementation 'org.junit.jupiter:junit-jupiter'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
+    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.7.0'
+
+    // OpenAPI generated client dependencies
+    implementation 'org.openapitools:jackson-databind-nullable:0.2.6'
+    implementation 'com.google.code.findbugs:jsr305:3.0.2'
+
+    // spring ai
+    implementation platform("org.springframework.ai:spring-ai-bom:${springAiVersion}")
+    implementation 'org.springframework.ai:spring-ai-vertex-ai-gemini'
+
+    // lombok
+    compileOnly 'org.projectlombok:lombok'
 }
 
 test {
     useJUnitPlatform()
+}
+
+def commonOptions = [
+        dateLibrary                             : "java21",
+        openApiNullable                         : "false",
+        disallowAdditionalPropertiesIfNotPresent: "false",
+        groupId                                 : "${group}",
+        interfaceOnly                           : "false",
+        singleContentTypes                      : "true",
+        unhandledException                      : "true",
+        useTags                                 : "true",
+        hideGenerationTimestamp                 : "true",
+        useSpringBoot3                          : "true",
+        useSpringAnnotations                    : "true"
+]
+
+// 可選：避免產出一堆 docs/tests
+def commonGlobals = [
+        apis      : "",
+        models    : "",
+        apiDocs   : "false",
+        modelDocs : "false",
+        apiTests  : "false",
+        modelTests: "false",
+        supportingFiles: ""
+]
+// 查詢帳號餘額
+openApiGenerate {
+    generatorName = "spring"
+    library = "spring-cloud"
+    inputSpec = "${rootDir}/portfolio-service/openapi/openapi.yaml".toString()
+    outputDir = "$rootDir/generated/openapi/".toString()
+    apiPackage = "${group}.controller.interfaces.generated"
+    invokerPackage = "${group}.${rootProject.name}.invoker"
+    modelPackage = "${group}.model.dto.generated.portfolio"
+    configOptions = [
+            dateLibrary                             : "java21",
+            openApiNullable                         : "false",
+            disallowAdditionalPropertiesIfNotPresent: "false",
+            groupId                                 : "${group}",
+            interfaceOnly                           : "false",
+            singleContentTypes                      : "true",
+            unhandledException                      : "true",
+            useTags                                 : "true",
+            hideGenerationTimestamp                 : "true",
+            useSpringBoot3                          : "true",
+            useSpringAnnotations                    : "true"
+    ]
+}
+
+sourceSets {
+    main {
+        java {
+            srcDirs "${buildDir}/generated/openapi/account/src/main/java"
+            srcDirs "${buildDir}/generated/openapi/order/src/main/java"
+            srcDirs "${buildDir}/generated/openapi/portfolio/src/main/java"
+        }
+    }
 }
