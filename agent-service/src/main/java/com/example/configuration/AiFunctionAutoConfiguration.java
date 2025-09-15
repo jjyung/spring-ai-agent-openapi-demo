@@ -17,6 +17,7 @@ public class AiFunctionAutoConfiguration {
     private final OrderApiClient orderApiClient;
     private final AccountApiClient accountApiClient;
     private final PortfolioApiClient portfolioApiClient;
+
     @Bean
     public ToolCallback orderBuyFunctionToolCallback() {
         return FunctionToolCallback
@@ -32,7 +33,7 @@ public class AiFunctionAutoConfiguration {
         return FunctionToolCallback
                 .builder("orderSell", new OrderSellFunction(orderApiClient))
                 .description("下單賣出股票") // function 描述
-                .inputType(OrderBuyFunction.Request.class)
+                .inputType(OrderSellFunction.Request.class)
                 .build();
     }
 
@@ -41,7 +42,7 @@ public class AiFunctionAutoConfiguration {
         return FunctionToolCallback
                 .builder("accountInquiry", new AccountFunction(accountApiClient))
                 .description("查詢帳號餘額") // function 描述
-                .inputType(OrderBuyFunction.Request.class)
+                .inputType(AccountFunction.Request.class)
                 .build();
     }
 
@@ -50,7 +51,7 @@ public class AiFunctionAutoConfiguration {
         return FunctionToolCallback
                 .builder("queryPortfolio", new QueryPortfolioFunction(portfolioApiClient))
                 .description("查詢帳號股票庫存") // function 描述
-                .inputType(OrderBuyFunction.Request.class)
+                .inputType(QueryPortfolioFunction.Request.class)
                 .build();
     }
 
@@ -59,7 +60,7 @@ public class AiFunctionAutoConfiguration {
         return FunctionToolCallback
                 .builder("putPortfolio", new PutPortfolioFunction(portfolioApiClient))
                 .description("更新帳號股票庫存") // function 描述
-                .inputType(OrderBuyFunction.Request.class)
+                .inputType(PutPortfolioFunction.Request.class)
                 .build();
     }
 

@@ -29,45 +29,22 @@ dependencies {
 
     // lombok
     compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
 }
 
 test {
     useJUnitPlatform()
 }
 
-def commonOptions = [
-        dateLibrary                             : "java21",
-        openApiNullable                         : "false",
-        disallowAdditionalPropertiesIfNotPresent: "false",
-        groupId                                 : "${group}",
-        interfaceOnly                           : "false",
-        singleContentTypes                      : "true",
-        unhandledException                      : "true",
-        useTags                                 : "true",
-        hideGenerationTimestamp                 : "true",
-        useSpringBoot3                          : "true",
-        useSpringAnnotations                    : "true"
-]
-
-// 可選：避免產出一堆 docs/tests
-def commonGlobals = [
-        apis      : "",
-        models    : "",
-        apiDocs   : "false",
-        modelDocs : "false",
-        apiTests  : "false",
-        modelTests: "false",
-        supportingFiles: ""
-]
 // 查詢帳號餘額
 openApiGenerate {
     generatorName = "spring"
     library = "spring-cloud"
-    inputSpec = "${rootDir}/portfolio-service/openapi/openapi.yaml".toString()
+    inputSpec = "${rootDir}/account-service/openapi/openapi.yaml".toString()
     outputDir = "$rootDir/generated/openapi/".toString()
     apiPackage = "${group}.controller.interfaces.generated"
     invokerPackage = "${group}.${rootProject.name}.invoker"
-    modelPackage = "${group}.model.dto.generated.portfolio"
+    modelPackage = "${group}.model.dto.generated.account"
     configOptions = [
             dateLibrary                             : "java21",
             openApiNullable                         : "false",

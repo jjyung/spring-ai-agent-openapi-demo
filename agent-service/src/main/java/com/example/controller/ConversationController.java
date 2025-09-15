@@ -1,13 +1,14 @@
 package com.example.controller;
 
 import com.example.manager.AiFunctionManager;
+import com.example.model.dto.ConversationResponseDTO;
+import com.example.utils.TokenUtils;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.ai.chat.messages.UserMessage;
-import org.springframework.ai.chat.model.ChatResponse;
 import org.springframework.ai.chat.prompt.Prompt;
 import org.springframework.ai.vertexai.gemini.VertexAiGeminiChatModel;
 import org.springframework.ai.vertexai.gemini.VertexAiGeminiChatOptions;
@@ -23,22 +24,25 @@ import org.springframework.web.bind.annotation.RestController;
 public class ConversationController {
     private static final String PROMPT_MESSAGE = """
             你是一位「台股買賣助理」。你協助使用者針對以下可投資標的協助查詢帳號餘額 股票庫存 下單買入賣出等動作：
-            - 台積電（2330.TW）
-            - 元大台灣50（0050.TW）
-            - 國泰永續高股息（00878.TW）
-            請根據這些資訊回答、協助客戶完成操作,以下是客戶的提問: %s
+            - 台積電（2330.TW）, 一股: 1000
+            - 元大台灣50（0050.TW）, 一股: 200
+            - 國泰永續高股息（00878.TW) , 一股: 20
+            請根據這些資訊回答、協助客戶完成操作, 此次客戶帳號為:%s,以下是客戶的提問: %s
             """;
     private final VertexAiGeminiChatModel chatModel;
     private final AiFunctionManager aiFunctionManager;
 
     @PostMapping("/chat")
     @Operation(summary = "與Gemini對話", description = "發送訊息給Gemini並取得回應")
-    public ChatResponse chatWithGemini(@RequestBody ChatRequest request) {
+    public ConversationResponseDTO chatWithGemini(@RequestBody ChatRequest request) {
         var chatOptions = VertexAiGeminiChatOptions.builder()
                 .toolCallbacks(aiFunctionManager.getAllFunctionCallback())
                 .build();
-        Prompt prompt = new Prompt(new UserMessage(String.format(PROMPT_MESSAGE, request.getMessage())), chatOptions);
-        return chatModel.call(prompt);
+        Prompt prompt = new Prompt(new UserMessage(String.format(PROMPT_MESSAGE, TokenUtils.getCurrentAccount(), request.getMessage())), chatOptions);
+        var responseDTO = new ConversationResponseDTO();
+        responseDTO.setMessage(chatModel.call(prompt).getResult().getOutput().getText());
+
+        return responseDTO;
     }
 
     @Data

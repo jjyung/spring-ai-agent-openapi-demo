@@ -32,6 +32,33 @@ paths:
         in: path
         required: true
         description: 帳號
+    put:
+      summary: 修改帳號餘額
+      operationId: put-api-inquiry-account
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: ../../order-service/openapi/openapi.yaml#/components/schemas/CommonResponseDTO
+              examples:
+                Example 1:
+                  value:
+                    message: success.
+                    returnCode: '0000'
+      tags:
+        - Account
+      description: 修改帳號餘額
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PutInquiryRequestDTO'
+            examples:
+              Example 1:
+                value:
+                  amount: 100
 components:
   schemas:
     GetInquiryResponseDTO:
@@ -45,5 +72,18 @@ components:
           x-stoplight:
             id: 7yis7z5t34ckg
           description: 帳號餘額
+    PutInquiryRequestDTO:
+      title: PutInquiryRequestDTO
+      x-stoplight:
+        id: nb5brq2nzkqga
+      type: object
+      properties:
+        amount:
+          type: number
+          x-stoplight:
+            id: zrqd44u6pqepo
+          description: '修改金額, +100=餘額+100 -100 = 餘額+(-100)'
+      required:
+        - amount
 tags:
   - name: Account
